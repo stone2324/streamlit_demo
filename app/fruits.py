@@ -41,7 +41,7 @@ def render_table():
         column_config=column_config,
         row_height=75,
         key='edited_df',        
-        width="content",
+        width="stretch",
         on_change=save_result_handle
     )
 
@@ -49,7 +49,7 @@ def render_fruit_page():
     if 'data_df' not in st.session_state:
         st.session_state['data_df'] = load_data()
 
-    _, col2, _ = st.columns([1,6,1])
+    col2, _ = st.columns([7,3])
     with col2:
         st.subheader("Fruits in Asia")
         render_table()
