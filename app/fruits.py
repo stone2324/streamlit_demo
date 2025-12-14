@@ -5,6 +5,7 @@ import pandas as pd
 input_fpath = "./data/fruits/fruits.csv"
 result_fpath = "./results/fruits_results.csv"
 
+
 def load_data():
     source_df = pd.read_csv(input_fpath)
     if os.path.exists(result_fpath):
@@ -13,9 +14,10 @@ def load_data():
         result_df = source_df[['fruit']].copy()
         result_df["completed"] = False
 
-    source_df = source_df.merge(result_df)     
-    source_df.index.name = 'Id'   
+    source_df = source_df.merge(result_df)
+    source_df.index.name = 'Id'
     return source_df[["fruit", "image_url", "completed"]]
+
 
 def render_table():
     def save_result_handle():
@@ -28,28 +30,30 @@ def render_table():
         result_df.to_csv(result_fpath, index=False)
 
     column_config = {
-        "fruit": st.column_config.TextColumn("Fruit Name", width="medium"),
+        "fruit": st.column_config.TextColumn("Fruit Name", width=125,),
         "image_url": st.column_config.ImageColumn(
             "Image",
             width=125,
         ),
-        "completed": st.column_config.CheckboxColumn("Done?", width=100),
+        "completed": st.column_config.CheckboxColumn("Tried?", width=100),
     }
 
     st.data_editor(
         st.session_state['data_df'],
         column_config=column_config,
         row_height=75,
-        key='edited_df',        
-        width="stretch",
+        hide_index=True,
+        key='edited_df',
+        width="content",
         on_change=save_result_handle
     )
+
 
 def render_fruit_page():
     if 'data_df' not in st.session_state:
         st.session_state['data_df'] = load_data()
 
-    col2, _ = st.columns([7,3])
+    col2, _ = st.columns([7, 3])
     with col2:
         st.subheader("Fruits in Asia")
         render_table()
